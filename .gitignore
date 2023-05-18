@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-!/xuecheng-plus-generator/
+/xuecheng-plus-generator/
 
 ### STS ###
 .apt_generated
