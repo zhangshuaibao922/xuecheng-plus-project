@@ -33,7 +33,9 @@ public class CourseBaseInfoController {
 
     @ApiOperation(value = "新增课程")
     @PostMapping("/course")
-    public CourseBaseInfoDto createCourseBase(AddCourseDto addCourseDto){
-        return null;
+    public CourseBaseInfoDto createCourseBase(@RequestBody AddCourseDto addCourseDto){
+        //TODO 机构id,由于认证系统没有上限，暂时写死
+        Long companyId=1232141425L;
+        return courseBaseInfoService.createCourseBase(companyId,addCourseDto);
     }
 }
