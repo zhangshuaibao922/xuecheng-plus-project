@@ -10,6 +10,7 @@ import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
+import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.model.po.CourseCategory;
@@ -110,6 +111,47 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         int i = saveCourseMarket(courseMarket);
         //查询课程基本信息并返回
         return getCourseBaseInfo(courseBase.getId());
+    }
+
+    @Override
+    public CourseBaseInfoDto getCourseBaseById(Long courseBaseId) {
+        return getCourseBaseInfo(courseBaseId);
+    }
+
+    @Override
+    public CourseBaseInfoDto updateCourseBase(Long companyId, EditCourseDto editCourseDto) {
+        //数据合法性校验
+        Long courseId = editCourseDto.getId();
+//        查询机构id
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        CourseMarket courseMarket = courseMarketMapper.selectById(courseId);
+        if(courseBase==null){
+            XueChengPlusException.cast("课程不存在");
+        }
+        if(courseMarket==null){
+            XueChengPlusException.cast("营销信息不存在");
+        }
+        //机构时只能修改相同机构的课程
+        if(companyId == courseBase.getCompanyId()){
+            XueChengPlusException.cast("机构权限不足");
+        }
+        //数据封装
+        BeanUtils.copyProperties(editCourseDto,courseBase);
+        BeanUtils.copyProperties(editCourseDto,courseMarket);
+        //修改时间
+        courseBase.setChangeDate(LocalDateTime.now());
+
+        //更新数据库
+        int i = courseBaseMapper.updateById(courseBase);
+        if(i<=0){
+            XueChengPlusException.cast("修改课程失败");
+        }
+        int i1 = courseMarketMapper.updateById(courseMarket);
+        if(i1<=0){
+            XueChengPlusException.cast("修改课程失败");
+        }
+
+        return getCourseBaseInfo(courseId);
     }
 
     /**
