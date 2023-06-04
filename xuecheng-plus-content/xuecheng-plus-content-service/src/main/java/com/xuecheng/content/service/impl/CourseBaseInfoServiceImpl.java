@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * @author cardo
  * @Version 1.0
- * @Description TODO
+ * @Description
  * @date 2023/5/18 20:42
  */
 @Service
@@ -159,7 +159,8 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
      * @param id courseBase的id
      * @return CourseBaseInfoDto
      */
-    private CourseBaseInfoDto getCourseBaseInfo(Long id) {
+
+    public CourseBaseInfoDto getCourseBaseInfo(Long id) {
         CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
         //从课程基本信息表查询
         CourseBase courseBase = courseBaseMapper.selectById(id);
@@ -173,7 +174,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         }
         BeanUtils.copyProperties(courseBase,courseBaseInfoDto);
         BeanUtils.copyProperties(courseMarket,courseBaseInfoDto);
-        //TODO 课程分类的名称设置到courseBaseInfoDto
+        //课程分类的名称设置到courseBaseInfoDto
         CourseCategory courseCategoryBySt  = courseCategoryMapper.selectById(courseBase.getSt());
         courseBaseInfoDto.setStName(courseCategoryBySt.getName());
         CourseCategory courseCategoryByMt  = courseCategoryMapper.selectById(courseBase.getMt());
